@@ -868,7 +868,7 @@ void add_kv_output(char *param)
     next_output_handler = &output->next;
 }
 
-int main(int argc, char **argv) {
+int c_main(int argc, char **argv) {
 #ifndef _WIN32
     struct sigaction sigact;
 #endif

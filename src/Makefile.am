@@ -6,6 +6,7 @@ bin_PROGRAMS         = rtl_433
 rtl_433_SOURCES      = baseband.c \
                        bitbuffer.c \
                        data.c \
+		       prometheus.cc \
                        pulse_demod.c \
                        pulse_detect.c \
                        rtl_433.c \
