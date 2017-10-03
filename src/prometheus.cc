@@ -31,9 +31,6 @@ extern "C" void prom_setup(int port) {
     std::stringstream bind;
     bind << "0.0.0.0:" << port;
     e = new Exporter(bind.str());
-    e->temperature({{"foo", "bar"}}).Increment(1);
-    e->temperature({{"foo", "bar"}}).Increment(1);
-    e->temperature({{"foo", "bar"}}).Increment(1);
 }
 
 Exporter::Exporter(std::string bind_address) :
@@ -60,5 +57,16 @@ Gauge& Exporter::temperature(std::map<std::string, std::string> labels) {
     Gauge& t = temperature_family_->Add(labels);
     temperatures_.insert(std::make_pair(combined, &t));
     return t;
+}
+
+extern "C" void prom_ambient_weather(const char *model, int device_id, int channel, int battery_low, double temperature, int humidity) {
+    std::stringstream device_id_, channel_;
+    device_id_ << device_id;
+    channel_ << channel;
+    std::map<std::string, std::string> key({
+        {"model", model},
+        {"device_id", device_id_.str()},
+        {"channel", channel_.str()}});
+    e->temperature(key).Set(temperature);
 }
 }

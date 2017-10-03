@@ -1,6 +1,7 @@
 #include "rtl_433.h"
 #include "data.h"
 #include "util.h"
+#include "prometheus.h"
 
 static float
 get_temperature (uint8_t * msg)
@@ -149,8 +150,9 @@ ambient_weather_parser (bitbuffer_t *bitbuffer)
         deviceID = get_device_id (bb[0]);
         isBatteryLow = get_battery_status(bb[0]);
 
+        const char *const model = "Ambient Weather F007TH Thermo-Hygrometer";
         data = data_make("time", "", DATA_STRING, time_str,
-            "model",    "",    DATA_STRING,    "Ambient Weather F007TH Thermo-Hygrometer",
+            "model",    "",    DATA_STRING,    model,
             "device", "House Code", DATA_INT, deviceID,
             "channel", "Channel", DATA_INT, channel,
             "battery", "Battery", DATA_STRING, isBatteryLow ? "Low" : "Ok",
@@ -158,6 +160,7 @@ ambient_weather_parser (bitbuffer_t *bitbuffer)
             "humidity", "Humidity", DATA_FORMAT, "%u %%", DATA_INT, humidity,
             NULL);
         data_acquired_handler(data);
+        prom_ambient_weather(model, deviceID, channel, isBatteryLow, temperature, humidity);
 
         return 1;
     }
