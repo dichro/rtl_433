@@ -29,6 +29,7 @@
 #include "pulse_demod.h"
 #include "data.h"
 #include "util.h"
+#include "prometheus.h"
 
 
 static int do_exit = 0;
@@ -1292,6 +1293,7 @@ int c_main(int argc, char **argv) {
     if (!quiet_mode) {
         fprintf(stderr, "Reading samples in async mode...\n");
     }
+    prom_setup(5999);
         while (!do_exit) {
             /* Set the frequency */
             r = rtlsdr_set_center_freq(dev, frequency[frequency_current]);
