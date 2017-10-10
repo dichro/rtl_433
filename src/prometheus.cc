@@ -42,6 +42,7 @@ struct Exporter {
 
     AutoMetrics<Counter> updates_;
     AutoMetrics<Gauge> temperature_;
+    AutoMetrics<Gauge> humidity_;
 };
 
 static Exporter* e;
@@ -62,6 +63,10 @@ Exporter::Exporter(std::string bind_address) :
         temperature_(&BuildGauge()
             .Name("temperature")
             .Help("temperature in device-reported degrees")
+            .Register(*registry_)),
+        humidity_(&BuildGauge()
+            .Name("humidity")
+            .Help("humidity percentage")
             .Register(*registry_)) {
     exposer_->RegisterCollectable(registry_);
 }
@@ -82,5 +87,6 @@ extern "C" void prom_ambient_weather(const char *model, int device_id, int chann
         });
     e->updates_.get(key, labels).Increment();
     e->temperature_.get(key, labels).Set(temperature);
+    e->humidity_.get(key, labels).Set(humidity);
 }
 }
