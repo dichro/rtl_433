@@ -91,4 +91,4 @@ rtl_433_SOURCES      = baseband.c \
                        devices/tpms_renault.c \
                        devices/infactory.c
 
-rtl_433_LDADD        = $(LIBRTLSDR) $(LIBM)
+rtl_433_LDADD        = $(LIBRTLSDR) $(LIBM) $(LIBPROTOBUF_LIBS)

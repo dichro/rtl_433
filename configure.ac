@@ -55,6 +55,9 @@ AC_TRY_COMPILE([],[],
   AC_MSG_RESULT(no)
   CFLAGS="$old_CFLAGS")
 
+AC_LANG_CPLUSPLUS
+AC_CHECK_LIB(prometheus-cpp, main)
+
 dnl Generate the output
 AM_CONFIG_HEADER(config.h)
 
