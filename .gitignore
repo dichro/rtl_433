@@ -47,3 +47,9 @@ build/
 
 *.orig
 *~
+
+parts/
+prime/
+stage/
+*.snap
+snap/.snapcraft
