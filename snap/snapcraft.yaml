@@ -1,20 +1,20 @@
-name: rtl433-dichro  # you probably want to 'snapcraft register <name>'
-version: '0.1' # just for humans, typically '1.2+git' or '1.3.2'
+name: rtl433-dichro
+version: '0.2' # just for humans, typically '1.2+git' or '1.3.2'
 summary: rtl_433 crudely patched to export to Prometheus # 79 char long summary
 description: |
   rtl_433 uses librtlsdr to monitor common wireless sensors (eg temperature, humidity,
   etc). This version of the program has been patched to export metrics for a subset of
   devices that can be monitored by Prometheus.
 
-grade: devel # must be 'stable' to release into candidate/stable channels
+grade: stable # must be 'stable' to release into candidate/stable channels
 confinement: strict # use 'strict' once you have the right plugs and slots
 
 apps:
   rtl433-dichro:
     command: bin/rtl_433
-  
+
   exporter:
-    command: bin/rtl_433
+    command: bin/rtl_433 -P 5999 # TODO(dichro): how do I make the port user-configurable?
     daemon: simple
     plugs: [network-bind, raw-usb]
 

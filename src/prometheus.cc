@@ -72,6 +72,9 @@ Exporter::Exporter(std::string bind_address) :
 }
 
 extern "C" void prom_ambient_weather(const char *model, int device_id, int channel, int battery_low, double temperature, int humidity) {
+    if (!e) {
+        return;
+    }
     std::stringstream device_id_, channel_;
     device_id_ << device_id;
     channel_ << channel;

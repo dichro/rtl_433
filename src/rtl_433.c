@@ -121,6 +121,7 @@ void usage(r_device *devices) {
             "\t[-q] Quiet mode, suppress non-data messages\n"
             "\t[-W] Overwrite mode, disable checks to prevent files from being overwritten\n"
             "\t[-y <code>] Verify decoding of demodulated test data (e.g. \"{25}fb2dd58\") with enabled devices\n"
+            "\t[-P <port>] Port on which to expose Prometheus metrics\n"
             "\t= File I/O options =\n"
             "\t[-t] Test signal auto save. Use it together with analyze mode (-a -t). Creates one file per signal\n"
             "\t\t Note: Saves raw I/Q samples (uint8 pcm, 2 channel). Preferred mode for generating test files\n"
@@ -911,7 +912,7 @@ int c_main(int argc, char **argv) {
     demod->level_limit = DEFAULT_LEVEL_LIMIT;
     demod->hop_time = DEFAULT_HOP_TIME;
 
-    while ((opt = getopt(argc, argv, "x:z:p:DtaAI:qm:r:l:d:f:H:g:s:b:n:SR:F:C:T:UWGy:")) != -1) {
+    while ((opt = getopt(argc, argv, "x:z:p:DtaAI:qm:r:l:d:f:H:g:s:b:n:SR:F:C:T:UWGy:P:")) != -1) {
         switch (opt) {
             case 'd':
                 dev_index = atoi(optarg);
@@ -1037,6 +1038,9 @@ int c_main(int argc, char **argv) {
           break;
             case 'y':
                 test_data = optarg;
+                break;
+            case 'P':
+                prom_setup(atoi(optarg));
                 break;
             default:
                 usage(devices);
@@ -1293,7 +1297,6 @@ int c_main(int argc, char **argv) {
     if (!quiet_mode) {
         fprintf(stderr, "Reading samples in async mode...\n");
     }
-    prom_setup(5999);
         while (!do_exit) {
             /* Set the frequency */
             r = rtlsdr_set_center_freq(dev, frequency[frequency_current]);
