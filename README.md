@@ -1,3 +1,15 @@
+This is a version of rtl_433 that exposes metrics to Prometheus. Pass a
+-P <port> flag to bind a port on startup and expose the metrics.
+
+Currently, only the Ambient Weather driver is plumbed through to Prometheus,
+but it's simple to add more. Check out the changes in
+src/devices/ambient_weather.c to see how, and do send me a pull request.
+
+The sample/ subdirectory contains a script to generate Prometheus rules;
+modify to match your configuration. Don't send me a pull request.
+
+Original README.md follows.
+
 rtl_433
 =======
 
